@@ -1,0 +1,37 @@
+{
+  "name": "vibe-git-skill",
+  "version": "1.0.0",
+  "description": "Cross-platform AI agent skill for project management through GitLab and GitHub with a structured vibe coding workflow",
+  "main": "dist/cli/index.js",
+  "bin": {
+    "agent-skill": "dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli/index.js",
+    "dev": "ts-node src/cli/index.ts",
+    "test": "jest --passWithNoTests",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "skill",
+    "github",
+    "gitlab",
+    "vibe-coding",
+    "workflow"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "@types/jest": "^29.5.11"
+  }
+}
