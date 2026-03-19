@@ -156,6 +156,7 @@ export class WorkflowEngine {
 
   /**
    * Build a conventional commit message from issue metadata and step description.
+   * Only id, title, and labels are used by CommitGenerator — other fields are safe as defaults.
    */
   private buildCommitMessage(issueId: number, issueTitle: string, stepDescription: string): string {
     const issue: Issue = {
