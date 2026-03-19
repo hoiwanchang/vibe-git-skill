@@ -1,6 +1,6 @@
 import { ProjectProvider } from "../core/provider";
 import { CommitGenerator } from "../core/commit-generator";
-import { DevelopmentPlan, PlanStep, Issue } from "../core/types";
+import { AgentContext, DevelopmentPlan, PlanStep, Issue } from "../core/types";
 import { MemoryStore } from "../memory/memory-store";
 import { ContextEngine } from "../context/context-engine";
 
@@ -59,7 +59,7 @@ export class WorkflowEngine {
   async continue(): Promise<{
     step: PlanStep | null;
     commitMessage: string | null;
-    context: import("../core/types").AgentContext;
+    context: AgentContext;
     done: boolean;
   }> {
     const state = this.memory.load();
@@ -110,10 +110,9 @@ export class WorkflowEngine {
       inProgress.commitSha = commitSha;
       plan.updatedAt = new Date().toISOString();
       this.memory.savePlan(plan);
-      this.memory.recordCommit(commitSha, this.commitGen.generate(
-        { id: state.currentIssueId, title: plan.issueTitle, description: "", state: "open", labels: [], url: "", createdAt: "", updatedAt: "" },
-        inProgress.description,
-      ), state.currentIssueId);
+
+      const commitMessage = this.buildCommitMessage(state.currentIssueId, plan.issueTitle, inProgress.description);
+      this.memory.recordCommit(commitSha, commitMessage, state.currentIssueId);
       this.memory.advancePlanStep();
     }
   }
@@ -154,6 +153,23 @@ export class WorkflowEngine {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────
+
+  /**
+   * Build a conventional commit message from issue metadata and step description.
+   */
+  private buildCommitMessage(issueId: number, issueTitle: string, stepDescription: string): string {
+    const issue: Issue = {
+      id: issueId,
+      title: issueTitle,
+      description: "",
+      state: "open",
+      labels: [],
+      url: "",
+      createdAt: "",
+      updatedAt: "",
+    };
+    return this.commitGen.generate(issue, stepDescription);
+  }
 
   /**
    * Derive plan steps from an issue's description.
