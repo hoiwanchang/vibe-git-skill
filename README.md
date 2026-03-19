@@ -34,10 +34,17 @@ npm run build
 
 ### 2. Configure
 
-Copy `.env.example` to `.env` and fill in your credentials:
+Set the required environment variables. You can either export them directly in your shell or use a `.env` file (copy `.env.example` as a starting point):
 
 ```bash
+# Option A: copy the example file and edit it
 cp .env.example .env
+
+# Option B: export directly
+export PROVIDER=github
+export GITHUB_TOKEN=ghp_xxxx
+export GITHUB_OWNER=your-org
+export GITHUB_REPO=your-repo
 ```
 
 **GitHub:**
